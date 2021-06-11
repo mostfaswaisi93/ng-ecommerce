@@ -1,32 +1,35 @@
-import { ProductsService } from './services/products.service';
-import { Router } from '@angular/router';
-import { UserService } from './services/users.service';
-import { Component, Input } from '@angular/core';
-import { ToastrManager } from 'ng6-toastr-notifications';
+import { Component, OnInit } from '@angular/core';
+import { Category } from './models/category';
+import { AuthService } from './services/auth/auth.service';
+import { CategoryService } from './services/category/category.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'maba';
-  constructor(
-    private userService: UserService,
-    private productsService: ProductsService,
-    private router: Router,
-    private toastr: ToastrManager
-  ) {}
+export class AppComponent implements OnInit {
+  title = 'e-commerce';
+  categories: Category[]; // will be sent to child component
 
-  logOut() {
-    this.userService.isLogin = false;
-    this.userService.isAdmin = false;
-    localStorage.removeItem('token');
-    this.toastr.successToastr('Logged out successfully');
-    this.router.navigateByUrl('/login');
+  constructor(public authService: AuthService,
+              private categoryService: CategoryService) {
+    authService.prepareUserData();
+    authService.refreshInfo();
+    this.prepareCategories();
   }
 
-  goCart() {
-    this.router.navigateByUrl('/checkout');
+  prepareCategories(): any {
+    this.categoryService.getCategories()
+      .subscribe(resData => {
+        this.categories = resData;
+      });
   }
+
+  ngOnInit(): void {
+    this.authService.prepareUserData();
+    this.authService.refreshInfo();
+    this.prepareCategories();
+  }
+
 }

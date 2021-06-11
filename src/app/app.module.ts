@@ -1,61 +1,92 @@
-import { ProductsService } from './services/products.service';
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProductsComponent } from './products/products.component';
-import { ProductComponent } from './product/product.component';
-import { LoginComponent } from './login/login.component';
-
-import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { CartComponent } from './components/cart/cart.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { CategoryDetailsComponent } from './components/category-details/category-details.component';
+import { CategoryListComponent } from './components/category-list/category-list.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { HomeComponent } from './components/home/home.component';
+import { OrderComponent } from './components/order/order.component';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ProductFilterPipe } from './pipes/product-filter.pipe';
+import { AddToCartComponent } from './shared/add-to-cart/add-to-cart.component';
+import { AlertComponent } from './shared/alert/alert.component';
+import { ApplicationErrorComponent } from './shared/application-error/application-error.component';
+import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { ResourceNotFoundComponent } from './shared/resource-not-found/resource-not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ng6-toastr-notifications';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
-import { CheckoutComponent } from './checkout/checkout.component';
-import { AdminProductsComponent } from './admin-products/admin-products.component';
-import { AdminUsersComponent } from './admin-users/admin-users.component';
-import { ProfileComponent } from './profile/profile.component';
-import { SignupComponent } from './signup/signup.component';
-import { FirstUpperPipe } from './pipes/first-upper.pipe';
-import { UserService } from './services/users.service';
-import { AboutComponent } from './about/about.component';
-import { EditProductComponent } from './edit-product/edit-product.component';
-import { AddProductComponent } from './add-product/add-product.component';
-import { Page404Component } from './page404/page404.component';
-import { HomeComponent } from './home/home.component';
+import { AdminModule } from './admin/admin.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from './shared/material/material.module';
+import { FilesModule } from './shared/files/files.module';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+// ngxComponents
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TokenInterceptorService } from './services/auth/token-interceptor.service';
+import { ErrorInterceptorService } from './services/auth/error-interceptor.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProductsComponent,
-    ProductComponent,
+    HomeComponent,
     LoginComponent,
-    CheckoutComponent,
-    AdminProductsComponent,
-    AdminUsersComponent,
+    RegisterComponent,
+    CartComponent,
+    CategoryListComponent,
+    CategoryDetailsComponent,
+    ContactComponent,
+    OrderComponent,
+    ProductListComponent,
+    ProductDetailsComponent,
+    ProductFilterPipe,
+    AlertComponent,
+    ApplicationErrorComponent,
+    PageNotFoundComponent,
+    ResourceNotFoundComponent,
     ProfileComponent,
-    SignupComponent,
-    FirstUpperPipe,
-    AboutComponent,
-    EditProductComponent,
-    AddProductComponent,
-    Page404Component,
-    HomeComponent
+    AddToCartComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    AdminModule,
     FormsModule,
-    NgbModule,
-    ToastrModule.forRoot()
+    ReactiveFormsModule,
+    FilesModule,
+    HttpClientModule,
+    CarouselModule.forRoot(),
+    TooltipModule.forRoot(),
+    ModalModule.forRoot(),
+    PopoverModule.forRoot(),
+    AccordionModule.forRoot(),
+    PaginationModule.forRoot(),
   ],
-  providers: [UserService, ProductsService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptorService,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

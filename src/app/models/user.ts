@@ -1,16 +1,14 @@
-// import { ICompany } from "./company";
-// import { IAddress } from "./address";
-export interface IUser {
+import { Invoice } from './invoice';
+import { Order } from './order';
+import { Payment } from './payment';
+
+export class User {
   id: number;
-  name: string;
-  firstName: string;
-  lastName: string;
   username: string;
-  email: string;
   password: string;
-  // address: IAddress;
-  phone: number;
-  mobile: number;
-  website: string;
-  // company: ICompany;
+  profileId: number;
+  isAdmin: boolean;
+  orders: Order[];
+  invoices: Invoice[];
+  payments: Payment[];
 }
